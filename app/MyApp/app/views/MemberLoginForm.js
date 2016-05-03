@@ -46,16 +46,13 @@ $(function() {
                 },
                 async: false
             });
-            // create the form
             this.form = new Backbone.Form({
                 model: this.model
             })
 
             this.$el.append(this.form.render().el);
             console.log('value of dropdown '+$('#onLoginLanguage :selected').val());
-            //languageDictValue=getSpecificLanguage($('#onLoginLanguage :selected').val());
-            //Checking here that if the value of cookie is unset due to any reason then set its value
-            if($.cookie('languageFromCookie')==null) //|| $('#onLoginLanguage :selected').val() ==undefined )
+            if($.cookie('languageFromCookie')==null) 
             {
                 console.log('Cookie did not exist before');
                 var configurations = Backbone.Collection.extend({
@@ -129,42 +126,83 @@ $(function() {
                 success: function() {
                     var i;
                     if (members.length > 0) {
-                       // member=members.first();
-                      for(i=0; i <members.length ; i++)
-                      {
-                      member= members.models[i];
+                        // member=members.first();
+                        for(i=0; i <members.length ; i++)
+                        {
+                            member = members.models[i];
+                            var go_ahead_with_login = 0;
 
-                      if (member && member.get('password') == credentials.get('password') && member.get('login') == credentials.get('login')  ) {
-                          if(member.get('community') == bellCode){
-                              memberLoginForm.processMemberLogin(member);  //Does the functionality of after-login
-                              break;
-                          }
-                          else {
-                              if(member.get('community')==undefined)
-                              {
-                                  if(member.get('visits')==0)
-                                  {
-                                      App.member=member;
-                                      Backbone.history.navigate('configuration/add', {
-                                          trigger: true
-                                      });
-                                  }
-                                  else {
-                                      member.set('community',bellCode);
-                                      member.save();
-                                      i--;
-                                      memberLoginForm.processMemberLogin(member);
-                                  }
-                              }
-                          }
+                            if (!member || (member.get('login') != credentials.get('login'))){
+                                continue;
+                            }
 
-                      }
-                      }
-                    if(i==members.length)
-                    {
+                            password_data = member.get('password_data');
+                            if (password_data){
+                                if (password_data.type == 'md5' && password_data.value ){
+                                    if( md5(credentials.get('password')) == password_data.value) {
+                                        console.log([md5(credentials.get('password')), password_data.value]);
+                                        go_ahead_with_login = 1
+                                    }
+                                }
+                                if (password_data.type == 'pbkdf21' && password_data.value ){
+                                    hash_str = pbk_hash(credentials.get('password'),'salt',10,20);
+                                    if( hash_str == password_data.value) {
+                                        console.log('pbk_hashing');
+                                        go_ahead_with_login = 1
+                                    }
+                                }
+                            }
+                            else if (member.get('password') == credentials.get('password'))   {
+                                go_ahead_with_login = 1;
+                            }
+
+                            if (go_ahead_with_login == 1) {
+                                if (!member.get(password_data)) {
+                                    if (get_password_type() == 'md5'){
+                                        password_data = {
+                                            'type': 'md5',
+                                            'value': md5(member.get("password")),
+                                            'plaintext': member.get("password")
+                                        };
+                                    }
+                                    if (get_password_type() == 'pbkdf21'){
+                                        password_data = {
+                                            'type': 'pbkdf21',
+                                            'value': pbk_hash(member.get("password"),"salt",10,20),
+                                            'plaintext': member.get("password")
+                                        };
+                                    }
+                                    member.set('password_data', password_data)
+                                }
+
+                                if(member.get('community') == bellCode){
+                                    memberLoginForm.processMemberLogin(member);  //Does the functionality of after-login
+                                    break;
+                                }
+                                else {
+                                    if(member.get('community')==undefined) {
+                                        if(member.get('visits')==0) {
+                                            App.member=member;
+                                            Backbone.history.navigate('configuration/add', {
+                                                trigger: true
+                                            });
+                                        }
+                                        else {
+                                            member.set('community',bellCode);
+                                            member.save();
+                                            i--;
+                                            memberLoginForm.processMemberLogin(member);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if(i==members.length)
+                        {
                             alert(App.languageDict.attributes.Invalid_Credentials)
+                        }
                     }
-                    } else {
+                    else {
                         alert(App.languageDict.attributes.Invalid_Credentials)
                     }
                 }
@@ -218,8 +256,6 @@ $(function() {
                     return;
                 }
                 memberLoginForm.trigger('success:login');
-                // }
-                //							console.log(member.toJSON())
             } else {
                 alert(App.languageDict.attributes.Account_DeActivated)
             }
@@ -245,14 +281,12 @@ $(function() {
             var superMgrIndex = member.get('roles').indexOf('SuperManager');
             if (member.get('Gender') == 'Male') {
                 var visits = parseInt(logModel.male_visits)
-                //  if (!member.get('roles')[superMgrIndex ] == "SuperManager") {
                 if (superMgrIndex == -1) {
                     visits++
                 }
                 logModel.male_visits = visits
             } else {
                 var visits = parseInt(logModel.female_visits)
-                //  if (!member.get('roles')[superMgrIndex ] == "SuperManager") {
                 if (superMgrIndex == -1) {
                     visits++
                 }
@@ -260,13 +294,12 @@ $(function() {
             }
             logModel.community = App.configuration.get("code");
 
-            logdb.put(logModel, logdate, logModel._rev, function(err, response) { // _id: logdate, _rev: logModel._rev
+            logdb.put(logModel, logdate, logModel._rev, function(err, response) {
                 if (!err) {
                     console.log("MemberLoginForm:: updated daily log from pouchdb for today..");
                 } else {
                     console.log("MemberLoginForm:: UpdatejSONlog:: err making update to record");
                     console.log(err);
-                    //                    alert("err making update to record");
                 }
             });
         },
@@ -281,7 +314,6 @@ $(function() {
         createJsonlog: function(member, logdate, logdb) {
 
             var superMgrIndex = member.get('roles').indexOf('SuperManager');
-            // alert(superMgrIndex);
             var docJson = {
                 logDate: logdate,
                 resourcesIds: [],
@@ -292,7 +324,7 @@ $(function() {
                 male_rating: [],
                 community: App.configuration.get('code'),
                 female_rating: [],
-                resources_names: [], // Fill in blank resource title name(s) in trend activity report Facts & Figures : Issue #84
+                resources_names: [],
                 resources_opened: [],
                 male_opened: [],
                 female_opened: [],
@@ -302,7 +334,6 @@ $(function() {
             if (member.get('Gender') == 'Male') {
 
                 var visits = parseInt(docJson.male_visits)
-                //  if (!member.get('roles')[superMgrIndex ] == "SuperManager") {
                 if (superMgrIndex == -1) {
                     visits++
                 }
@@ -310,7 +341,6 @@ $(function() {
             } else {
 
                 var visits = parseInt(docJson.female_visits)
-                //    if (!member.get('roles')[superMgrIndex ] == "SuperManager") {
                 if (superMgrIndex == -1) {
                     visits++
                 }
@@ -323,7 +353,6 @@ $(function() {
                     } else {
                         console.log("MemberLoginForm:: createJsonlog:: error creating/pushing activity log doc in pouchdb..");
                         console.log(err);
-                        //                    alert("MemberLoginForm:: createJsonlog:: error creating/pushing activity log doc in pouchdb..");
                     }
                 });
         }

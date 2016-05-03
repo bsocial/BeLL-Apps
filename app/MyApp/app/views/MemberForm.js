@@ -340,6 +340,24 @@ $(function() {
                 if (this.model.get("_id") == undefined) {
                     this.model.set("roles", ["Learner"])
                     this.model.set("visits", 0);
+
+                    if (get_password_type() == 'md5'){
+                        password_data = {
+                            'type': 'md5',
+                            'value': md5(this.model.get("password")),
+                            'plaintext': this.model.get("password")
+                        };
+                    }
+                    if (get_password_type() == 'pbkdf21'){
+                        password_data = {
+                            'type': 'pbkdf21',
+                            'value': pbk_hash(this.model.get("password"),"salt",10,20),
+                            'plaintext': this.model.get("password")
+                        };
+                    }
+                    console.log(password_data);
+                    this.model.set("password_data", password_data);
+
                     if($.cookie('languageFromCookie')===null)
                     {
                         this.model.set("bellLanguage",App.configuration.attributes.currentLanguage);
