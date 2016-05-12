@@ -784,6 +784,7 @@ $(function() {
                 })
                 // Set up the form
                 modelForm.render();
+                $('.bbf-form .field-courseLeader .bbf-editor select').attr('multiple','multiple');
 
                 $('.form .field-startDate input').datepicker({
                     todayHighlight: true
@@ -1727,6 +1728,7 @@ $(function() {
                 $('.bbf-form').find('.field-memberLimit').find('label').html(App.languageDict.attributes.Member_Limit);
                 $('.bbf-form').find('.field-courseLeader').find('label').html(App.languageDict.attributes.Course_Leader);
                 $('.bbf-form').find('.field-courseLeader').find('.bbf-editor select').attr('multiple','multiple');
+                //$('.bbf-form .field-courseLeader .bbf-editor select').attr('multiple','multiple');
                 $('.bbf-form').find('.field-description').find('label').html(App.languageDict.attributes.Description);
                 $('.bbf-form').find('.field-method').find('label').html(App.languageDict.attributes.Method);
                 $('.bbf-form').find('.field-gradeLevel').find('label').html(App.languageDict.attributes.Grade_Level);
