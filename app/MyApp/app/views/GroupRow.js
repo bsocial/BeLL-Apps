@@ -114,14 +114,12 @@ $(function () {
                     for (var j=0 ; j< vars.courseLeader.length;j++) {
                         if (vars.courseLeader[j] == $.cookie('Member._id')) {
                             cLeader = 1;
-                            alert ("inside loop:"+  cLeader )
                             break;
                         }
                     }
                 }
                 else {
                     cLeader = 0
-                    alert ("else :"+  cLeader )
                 }
                 //vars.courseLeader == $.cookie('Member._id')
 			if (this.roles.indexOf("Manager") != -1 || cLeader!=0 || vars.members.indexOf($.cookie('Member._id'))!=-1)
