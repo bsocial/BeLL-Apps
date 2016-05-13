@@ -837,7 +837,7 @@ $(function() {
 
             //Setting up the default error Message
             Backbone.Form.validators.errMessages.required=languageDictValue.attributes.Required_Text;
-            $('.bbf-form .field-courseLeader .bbf-editor select').find('option').eq(0).css('display','none');
+           // $('.bbf-form .field-courseLeader .bbf-editor select').find('option').eq(0).css('display','none');
 
             if(!modelId){
                 //Setting up the default selected customized text
@@ -1723,7 +1723,7 @@ $(function() {
 
 
 
-                $('.bbf-form .field-courseLeader .bbf-editor select').find('option').eq(0).css('display','none');
+               // $('.bbf-form .field-courseLeader .bbf-editor select').find('option').eq(0).css('display','none');
                 $('.bbf-form').find('.field-CourseTitle').find('label').html(App.languageDict.attributes.Course_Title);
                 $('.bbf-form').find('.field-languageOfInstruction').find('label').html(App.languageDict.attributes.Language_Of_Instruction);
                 $('.bbf-form').find('.field-memberLimit').find('label').html(App.languageDict.attributes.Member_Limit);
