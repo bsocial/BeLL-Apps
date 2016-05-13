@@ -1724,7 +1724,6 @@ $(function() {
                 $('#AddCourseMainDiv').append(modelForm.el);
                 // Set up the form
                 modelForm.render();
-
                 $('.bbf-form').find('.field-CourseTitle').find('label').html(App.languageDict.attributes.Course_Title);
                 $('.bbf-form').find('.field-languageOfInstruction').find('label').html(App.languageDict.attributes.Language_Of_Instruction);
                 $('.bbf-form').find('.field-memberLimit').find('label').html(App.languageDict.attributes.Member_Limit);
