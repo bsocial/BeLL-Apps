@@ -47,7 +47,6 @@ $(function() {
                     leaderNames += ", ";
                     leaderEmails += ", ";
                     leaderPhones += ", ";
-
                 }
 
             }
