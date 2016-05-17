@@ -452,7 +452,7 @@ function sendAdminRequest(courseLeader, courseName, courseId) {
     var courseLeaderIds=courseLeader.split(",");
     //courseLeaderId.push(courseLeader)
     var length2 = courseLeaderIds.length;
-    alert ("courseLeader: " + length2);
+    console.log ("courseLeader: " + length2);
     if(courseLeader.length >= 1){
         recipientIds = courseLeaderIds;
     }
