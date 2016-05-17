@@ -44,9 +44,9 @@ $(function() {
                 }
                 if((i + 1) != this.courseLeader.length)
                 {
-                    leaderNames += ",";
-                    leaderEmails += ",";
-                    leaderPhones += ",";
+                    leaderNames += ", ";
+                    leaderEmails += ", ";
+                    leaderPhones += ", ";
                 }
 
             }
