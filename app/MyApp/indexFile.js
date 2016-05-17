@@ -174,6 +174,7 @@ function submitSurvey(surveyId) {
     questionsColl.fetch({
         async: false
     });
+    console.log(questionsColl);
     var answersToSubmit = [];
     var requiredQuestionsCount = 0;
     var answerToRequiredQuestionsCount = 0;
@@ -184,6 +185,7 @@ function submitSurvey(surveyId) {
             requiredQuestionsCount++;
         }
     }
+    console.log(questionsColl);
     var surveyTable = $("#survey-questions-table >tbody");
     surveyTable.find('>tr').each(function (i) {
         var tds = $(this).find('td'),
@@ -445,20 +447,35 @@ function showFeedbackForm() {
 
 function sendAdminRequest(courseLeader, courseName, courseId) {
 
+    var recipientIds = [];
+    var courseLeaderIds = [];
+    var courseLeaderIds=courseLeader.split(",");
+    //courseLeaderId.push(courseLeader)
+    var length2 = courseLeaderIds.length;
+    alert ("courseLeader: " + length2);
+    if(courseLeader.length >= 1){
+        recipientIds = courseLeaderIds;
+    }
     var currentdate = new Date();
     var mail = new App.Models.Mail();
-    mail.set("senderId", $.cookie('Member._id'));
-    mail.set("receiverId", courseLeader);
-    mail.set("subject", App.languageDict.attributes.Course_Admission_Req+" | " + decodeURI(courseName));
-    mail.set("body", App.languageDict.attributes.Admission_Req_Received+' '
-    + $.cookie('Member.login') + ' ' +App.languageDict.attributes.For_Course+' ' + decodeURI(courseName) +
-    ' <br/><br/><button class="btn btn-primary" id="invite-accept" value="' + courseId + '" >'+App.languageDict.attributes.Accept+
-    '</button>&nbsp;&nbsp;<button class="btn btn-danger" id="invite-reject" value="' + courseId + '" >'+
-    App.languageDict.attributes.Reject+'</button>');
-    mail.set("status", "0");
-    mail.set("type", "admissionRequest");
-    mail.set("sentDate", currentdate);
-    mail.save()
+  //  for (var i=0; i< recipientIds.length;i++){
+        mail.set("senderId", $.cookie('Member._id'));
+        alert(recipientIds[i])
+        mail.set("receiverId",recipientIds[i]);
+
+        mail.set("subject", App.languageDict.attributes.Course_Admission_Req+" | " + decodeURI(courseName));
+        mail.set("body", App.languageDict.attributes.Admission_Req_Received+' '
+            + $.cookie('Member.login') + ' ' +App.languageDict.attributes.For_Course+' ' + decodeURI(courseName) +
+            ' <br/><br/><button class="btn btn-primary" id="invite-accept" value="' + courseId + '" >'+App.languageDict.attributes.Accept+
+            '</button>&nbsp;&nbsp;<button class="btn btn-danger" id="invite-reject" value="' + courseId + '" >'+
+            App.languageDict.attributes.Reject+'</button>');
+        mail.set("status", "0");
+        mail.set("type", "admissionRequest");
+        mail.set("sentDate", currentdate);
+        mail.save()
+  //  }
+
+
     $('#admissionButton').hide()
     alert(App.languageDict.attributes.RequestForCourse);
 
@@ -487,7 +504,7 @@ function checkIfExistsInLangDb(language){
     for(var i=0;i<languages.length && !(isPresent) ;i++) {
         if (languages.models[i].attributes.hasOwnProperty("nameOfLanguage")) {
             if (languages.models[i].attributes.nameOfLanguage == language) {
-               isPresent=true;
+                isPresent=true;
             }
         }
     }
