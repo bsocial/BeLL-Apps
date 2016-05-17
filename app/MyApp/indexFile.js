@@ -458,7 +458,7 @@ function sendAdminRequest(courseLeader, courseName, courseId) {
     }
     var currentdate = new Date();
     var mail = new App.Models.Mail();
-  //  for (var i=0; i< recipientIds.length;i++){
+    for (var i=0; i< recipientIds.length;i++){
         mail.set("senderId", $.cookie('Member._id'));
         alert(recipientIds[i])
         mail.set("receiverId",recipientIds[i]);
@@ -473,7 +473,7 @@ function sendAdminRequest(courseLeader, courseName, courseId) {
         mail.set("type", "admissionRequest");
         mail.set("sentDate", currentdate);
         mail.save()
-  //  }
+    }
 
 
     $('#admissionButton').hide()
