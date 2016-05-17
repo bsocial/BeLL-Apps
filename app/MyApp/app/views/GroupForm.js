@@ -316,6 +316,7 @@ $(function () {
 				success: function (e) {
 					console.log(context.model.get('courseLeader'))
                     var memprogress = new App.Models.membercourseprogress();
+                    var memProgressArray=[]
                     var stepsids = new Array();
                     var stepsres = new Array();
                     var stepsstatus = new Array();
@@ -324,23 +325,39 @@ $(function () {
 						memprogress.set("memberId", $.cookie("Member._id"))
 						memprogress.set("stepsResult", stepsres)
 						memprogress.set("stepsStatus", stepsstatus)
-						memprogress.set("courseId", e.get("id"))
+						memprogress.set("courseId", e.get("id"));
+                       // memProgressArray.push(memprogress);
 						memprogress.save()
 						//0000 is value for --select-- 
 						//if (context.model.get('courseLeader') != $.cookie("Member._id")&&context.model.get('courseLeader')!='0000') {
-                        if (context.model.get('courseLeader').indexOf( $.cookie("Member._id"))==-1 &&context.model.get('courseLeader')!='0000') {
-                            memprogress.set("stepsIds", stepsids)
-							memprogress.set("memberId",context.model.get('courseLeader') )
-							memprogress.set("stepsResult", stepsres)
-							memprogress.set("stepsStatus", stepsstatus)
-							memprogress.set("courseId", e.get("id"))
-							memprogress.save()
+                        if (context.model.get('courseLeader').indexOf( $.cookie("Member._id"))==-1 &&context.model.get('courseLeader').indexOf('0000')==-1) {
+                           for(var i=0;i<context.model.get('courseLeader').length;i++){
+                               memprogress.set("stepsIds", stepsids);
+                               memprogress.set("memberId",context.model.get('courseLeader')[i] )    //Needs some changes here
+                               memprogress.set("stepsResult", stepsres)
+                               memprogress.set("stepsStatus", stepsstatus)
+                               memprogress.set("courseId", e.get("id"))
+                               memprogress.save();
+                              // memProgressArray.push(memprogress);
+                           }
+                            //
 						}
+
+                       /* $.couch.db("membercourseprogress").bulkSave({"docs": memProgressArray}, {
+                                success: function(data) {
+                                    alert('members progress is saved..')
+                                    console.log(data);
+                                },
+                            error: function(status) {
+                                console.log(status);
+                            }
+                        });*/
 						alert(App.languageDict.attributes.Course_Created_Success)
 					}
 					else { // the course already exists
 
-                        if ( (leader !== previousLeader) && (isNewLeaderAlreadyCourseMember === false) ) {
+                        if ( (leader !== previousLeader) && (isNewLeaderAlreadyCourseMember === false) )  //Needs some changes here
+                         {
                             // if the newly chosen leader is different from previous one and he/she is also from outside the course, i-e
                             // he/she was not a member of course before being selected as its leader, then two things should happen:
 //                            // (i) previous-leader's membercourseprogress doc should be deleted
@@ -364,7 +381,7 @@ $(function () {
                                         stepsstatus.push("0")
                                     })
                                     memprogress.set("stepsIds", stepsids)
-                                    memprogress.set("memberId", leader)
+                                    memprogress.set("memberId", leader)    //Needs some changes here
                                     memprogress.set("stepsResult", stepsres)
                                     memprogress.set("stepsStatus", stepsstatus)
                                     memprogress.set("courseId", csteps.courseId)
