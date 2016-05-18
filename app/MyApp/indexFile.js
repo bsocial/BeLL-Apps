@@ -491,6 +491,14 @@ function sendAdminRequest(courseLeader, courseName, courseId) {
     if(courseLeader.length >= 1){
         recipientIds = courseLeaderIds;
     }
+    else
+    {
+        recipientIds = managerId;
+        alert(recipientIds)
+        alert(recipientIds.length)
+    }
+
+
     var currentdate = new Date();
     var mail = new App.Models.Mail();
     for (var i=0; i< recipientIds.length;i++){
