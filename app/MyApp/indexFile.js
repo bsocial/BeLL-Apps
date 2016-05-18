@@ -477,7 +477,7 @@ function sendManagerEmail(){
 }
 //*****************************
 function sendAdminRequest(courseLeader, courseName, courseId) {
-
+    var managerId = sendManagerEmail();
     var recipientIds = [];
     var courseLeaderIds = [];
     var courseLeaderIds=courseLeader.split(",");
