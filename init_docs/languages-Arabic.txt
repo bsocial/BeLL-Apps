@@ -778,3 +778,4 @@
   "Survey_Error_Message_For_Required_Questions":"Please provide all the answers to required questions",
   "adm_req_For_rejected":"Your admission request has been rejected by the course leader for"
 }
+
