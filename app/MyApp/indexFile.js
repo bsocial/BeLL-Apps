@@ -479,11 +479,15 @@ function sendManagerEmail(){
 function sendAdminRequest(courseLeader, courseName, courseId) {
     var managerId = sendManagerEmail();
     var recipientIds = [];
+    alert(managerId)
+    var length = managerId.length;
+    alert (length);
     var courseLeaderIds = [];
     var courseLeaderIds=courseLeader.split(",");
     //courseLeaderId.push(courseLeader)
     var length2 = courseLeaderIds.length;
-    console.log ("courseLeader: " + length2);
+    alert ("courseLeader: " + length2);
+
     if(courseLeader.length >= 1){
         recipientIds = courseLeaderIds;
     }
