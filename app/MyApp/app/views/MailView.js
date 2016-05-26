@@ -530,10 +530,9 @@ $(function() {
                 alert("Member is already enrolled in this course");
                 var body = mailView.inViewModel.get('body').replace(/<(?:.|\n)*?>/gm, '')
                 body = $.cookie('Member.login') + ' ' +'is already enrolled in'+' ' + course.attributes.CourseTitle
-
                 ////////////////////////////////////////
                 alert("inside else")
-                /*   var body = mailView.inViewModel.get('body').replace(/<(?:.|\n)*?>/gm, '')
+                  var body = mailView.inViewModel.get('body').replace(/<(?:.|\n)*?>/gm, '')
                  //body = body.replace('Accept', '').replace('Reject', '').replace('&nbsp;&nbsp;', '')
                  body = 'Admission request received from user "a" has been Rejected<br>'
                  body = body + "<div style='margin-left: 3%;margin-top: 174px;font-size: 11px;color: rgb(204,204,204);'>"+App.languageDict.attributes.request_Rejected_already+"</div>"
@@ -550,7 +549,7 @@ $(function() {
                  mail.set("status", "0");
                  mail.set("type", "mail");
                  mail.set("sentDate", currentdate);
-                 mail.save()*/
+                 mail.save()
             }
             mailView.updateMailBody(body)
         },
