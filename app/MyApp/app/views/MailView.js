@@ -506,17 +506,17 @@ $(function() {
             courseTitle = course.attributes.CourseTitle;
             memebersEnrolled = course.attributes.members
             var isAlreadyEnrolled = false;
-            alert(memebersEnrolled)
+            console.log(memebersEnrolled)
             var receiverId = mailView.inViewModel.get('senderId');
             for (var i=0; i<memebersEnrolled.length;i++){
                 // alert(memebersEnrolled[i])
                 if (receiverId == memebersEnrolled[i]){
-                    alert("reciever id"+receiverId)
+                    console.log("reciever id"+receiverId)
                     isAlreadyEnrolled = true;
                 }
             }
             alert("falg:" + isAlreadyEnrolled)
-            alert(courseTitle)
+            console.log(courseTitle)
             if (isAlreadyEnrolled){
                 alert("Member is already enrolled in this course");
                 var body = mailView.inViewModel.get('body').replace(/<(?:.|\n)*?>/gm, '')
@@ -531,7 +531,6 @@ $(function() {
                 var body = mailView.inViewModel.get('body').replace(/<(?:.|\n)*?>/gm, '')
                 body = $.cookie('Member.login') + ' ' +'is already enrolled in'+' ' + course.attributes.CourseTitle
                 ////////////////////////////////////////
-                alert("inside else")
                   var body = mailView.inViewModel.get('body').replace(/<(?:.|\n)*?>/gm, '')
                  //body = body.replace('Accept', '').replace('Reject', '').replace('&nbsp;&nbsp;', '')
                  body = 'Admission request received from user "a" has been Rejected<br>'
