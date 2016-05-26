@@ -773,6 +773,8 @@
   "Response": "Response",
   "Received": "Received",
   "Sent": "Sent",
-  "Survey_Error_Message_For_Required_Questions":"Please provide all the answers to required questions",
-  "adm_req_For_rejected":"Your admission request has been rejected by the course leader for"
+    "Survey_Error_Message_For_Required_Questions":"Please provide all the answers to required questions",
+    "adm_req_For_rejected":"Your admission request has been rejected by the course leader for",
+    "Title_Error": "Title is required",
+    "Description_Error": "Description is required"
 }

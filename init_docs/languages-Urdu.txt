@@ -784,8 +784,9 @@
  "Survey_Alert": "You have a new survey, please submit your response",
  "Response": "Response",
  "Received": "Received",
-  "Sent": "Sent",
+"Sent": "Sent",
   "Survey_Error_Message_For_Required_Questions":"Please provide all the answers to required questions",
-  "adm_req_For_rejected":"Your admission request has been rejected by the course leader for"
-
+  "adm_req_For_rejected":"Your admission request has been rejected by the course leader for",
+  "Title_Error": "Title is required",
+  "Description_Error": "Description is required"
 }
