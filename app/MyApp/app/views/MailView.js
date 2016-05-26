@@ -530,9 +530,7 @@ $(function() {
                 alert("Member is already enrolled in this course");
                 var body = mailView.inViewModel.get('body').replace(/<(?:.|\n)*?>/gm, '')
                 body = $.cookie('Member.login') + ' ' +'is already enrolled in'+' ' + course.attributes.CourseTitle
-                   + ' <br/><br/><button class="btn btn-primary" id="invite-accept" value="' + courseId + '" >'+App.languageDict.attributes.Accept+
-                    '</button>&nbsp;&nbsp;<button class="btn btn-danger" id="invite-reject" value="' + courseId + '" >'+
-                    App.languageDict.attributes.Reject+'</button>'
+
                 ////////////////////////////////////////
                 alert("inside else")
                 /*   var body = mailView.inViewModel.get('body').replace(/<(?:.|\n)*?>/gm, '')
