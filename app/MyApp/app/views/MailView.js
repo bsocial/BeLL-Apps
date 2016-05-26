@@ -515,7 +515,7 @@ $(function() {
                     isAlreadyEnrolled = true;
                 }
             }
-            alert("falg:" + isAlreadyEnrolled)
+            console.log("flag:" + isAlreadyEnrolled)
             console.log(courseTitle)
             if (isAlreadyEnrolled){
                 alert("Member is already enrolled in this course");
@@ -527,9 +527,9 @@ $(function() {
             else{
 
                 /////////////////////////////////////////
-                alert("Member is already enrolled in this course");
+               /* alert("Member is already enrolled in this course");
                 var body = mailView.inViewModel.get('body').replace(/<(?:.|\n)*?>/gm, '')
-                body = $.cookie('Member.login') + ' ' +'is already enrolled in'+' ' + course.attributes.CourseTitle
+                body = $.cookie('Member.login') + ' ' +'is already enrolled in'+' ' + course.attributes.CourseTitle*/
                 ////////////////////////////////////////
                   var body = mailView.inViewModel.get('body').replace(/<(?:.|\n)*?>/gm, '')
                  //body = body.replace('Accept', '').replace('Reject', '').replace('&nbsp;&nbsp;', '')
