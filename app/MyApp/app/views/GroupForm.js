@@ -171,10 +171,10 @@ $(function () {
                 success: function () {
                     //create the form
                     var optns = []
-                    optns.push({
+                   /* optns.push({
                         label: App.languageDict.attributes.Select_An_option,
                         val: "0000"
-                    })
+                    })*/
                     memberList.each(function (modl) {
                         if(typeofBell== modl.toJSON().community){
                             var temp = {
@@ -257,8 +257,24 @@ $(function () {
                 })
             })
             // Put the form's input into the model in memory
-            var previousLeader = this.model.get('courseLeader')
-            this.form.commit()
+
+            this.form.commit();
+            var previousLeader = [];
+            if(this.form.model.id) //if form's model has an "ID" attribute then we are editing existing course model.
+            {
+                var courseModel = new App.Models.Group({
+                    _id: this.form.model.id
+                });
+                courseModel.fetch({
+                    async: false
+                });
+                previousLeader = courseModel.get('courseLeader');
+                if(previousLeader==undefined || previousLeader==null)
+                {
+                    previousLeader=[];
+                }
+            }
+            
             this.model.set("name", this.model.get("CourseTitle"))
             // Send the updated model to the server
             if (this.model.get("_id") == undefined) {
@@ -293,14 +309,18 @@ $(function () {
                     member.save()
                 }
 
-                var isNewLeaderAlreadyCourseMember = false;
+                //  var isNewLeaderAlreadyCourseMember = false;
                 var leader = this.model.get('courseLeader');
-                var falseLeader=this.model.get('courseLeader').indexOf('0000')
+                if (leader == null)
+                {
+                    leader=previousLeader;
+                }
+              /*  var falseLeader=this.model.get('courseLeader').indexOf('0000')
                 if(falseLeader!=-1){
                     this.model.attributes.courseLeader.splice(falseLeader,1);
-                }
+                }*/
                 var courseMembers = this.model.get('members');
-                if(leader.length>0)
+                if(leader && leader.length>0)
                 {
                     for(var i=0;i<leader.length;i++)
                     {
@@ -309,15 +329,18 @@ $(function () {
                         } else {
                           //  isNewLeaderAlreadyCourseMember = true;  //if its true then it shows that either of the leaders is already a member
                         }
-
+                        var index = previousLeader.indexOf(leader[i]);
+                        if (index == -1) {
+                            previousLeader.push(leader[i]);
+                        }
                     }
                 }
 
                 //var index = courseMembers.indexOf(previousLeader)
                 this.model.set("members", courseMembers);
                 var context = this
-
                 var courseTitle = this.model.get('CourseTitle');
+                this.model.set('courseLeader',previousLeader);
                 this.model.set('CourseTitle', $.trim(courseTitle));
                 this.model.save(null, {
                     success: function (e) {
@@ -335,7 +358,7 @@ $(function () {
                             memprogress.save()
                             //0000 is value for --select--
                             //if (context.model.get('courseLeader') != $.cookie("Member._id")&&context.model.get('courseLeader')!='0000') {
-                            if (context.model.get('courseLeader').indexOf( $.cookie("Member._id"))==-1 &&context.model.get('courseLeader').indexOf('0000')==-1) {
+                            if (context.model.get('courseLeader') && context.model.get('courseLeader').indexOf( $.cookie("Member._id"))==-1){  //&&context.model.get('courseLeader').indexOf('0000')==-1) {
                                 for(var i=0;i<context.model.get('courseLeader').length;i++){
                                     memprogress.set("stepsIds", stepsids);
                                     memprogress.set("memberId",context.model.get('courseLeader')[i] )    //Needs some changes here
@@ -367,6 +390,9 @@ $(function () {
                             //COPIED CODE FROM HERE
                             //  }
                            // if ( (leader !== previousLeader) && (isNewLeaderAlreadyCourseMember === false) )  //Needs some changes here
+                            if(leader && leader.length==0){
+                                leader=previousLeader;
+                            }
                             _.each(leader,function(leaderId){
                                
                                 var index = previousLeader.indexOf(leaderId);
