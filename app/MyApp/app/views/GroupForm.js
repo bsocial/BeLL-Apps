@@ -299,7 +299,7 @@ $(function () {
                 if(falseLeader!=-1){
                     this.model.attributes.courseLeader.splice(falseLeader,1);
                 }
-                var courseMembers = this.model.get('members')
+                var courseMembers = this.model.get('members');
                 if(leader.length>0)
                 {
                     for(var i=0;i<leader.length;i++)
@@ -307,7 +307,7 @@ $(function () {
                         if (courseMembers.indexOf(leader[i]) == -1) { // new leader is not a member of the course already
                             courseMembers.push(leader[i])
                         } else {
-                            isNewLeaderAlreadyCourseMember = true;  //if its true then it shows that either of the leaders is already a member
+                          //  isNewLeaderAlreadyCourseMember = true;  //if its true then it shows that either of the leaders is already a member
                         }
 
                     }
@@ -323,7 +323,6 @@ $(function () {
                     success: function (e) {
                         console.log(context.model.get('courseLeader'))
                         var memprogress = new App.Models.membercourseprogress();
-                        var memProgressArray=[]
                         var stepsids = new Array();
                         var stepsres = new Array();
                         var stepsstatus = new Array();
@@ -333,7 +332,6 @@ $(function () {
                             memprogress.set("stepsResult", stepsres)
                             memprogress.set("stepsStatus", stepsstatus)
                             memprogress.set("courseId", e.get("id"));
-                            // memProgressArray.push(memprogress);
                             memprogress.save()
                             //0000 is value for --select--
                             //if (context.model.get('courseLeader') != $.cookie("Member._id")&&context.model.get('courseLeader')!='0000') {
@@ -345,28 +343,16 @@ $(function () {
                                     memprogress.set("stepsStatus", stepsstatus)
                                     memprogress.set("courseId", e.get("id"))
                                     memprogress.save();
-                                    // memProgressArray.push(memprogress);
                                 }
                                 //
                             }
 
-                            /* $.couch.db("membercourseprogress").bulkSave({"docs": memProgressArray}, {
-                             success: function(data) {
-                             alert('members progress is saved..')
-                             console.log(data);
-                             },
-                             error: function(status) {
-                             console.log(status);
-                             }
-                             });*/
                             alert(App.languageDict.attributes.Course_Created_Success)
                         }
                         else { // the course already exists
-
-                            if ( (leader !== previousLeader) && (isNewLeaderAlreadyCourseMember === false) )  //Needs some changes here
-                            {
-                                // if the newly chosen leader is different from previous one and he/she is also from outside the course, i-e
-                                // he/she was not a member of course before being selected as its leader, then two things should happen:
+                            //  {
+                            // if the newly chosen leader is different from previous one and he/she is also from outside the course, i-e
+                            // he/she was not a member of course before being selected as its leader, then two things should happen:
 //                            // (i) previous-leader's membercourseprogress doc should be deleted
 //                            var memberProgress = new App.Collections.membercourseprogresses();
 //                            memberProgress.courseId = context.model.get("_id");
@@ -377,29 +363,41 @@ $(function () {
 //                            memberProgress.each(function (m) {
 //                                m.destroy();
 //                            });
-                                // (ii) new-leader's membercourseprogress doc should be created and initialised with default values
-                                var csteps = new App.Collections.coursesteps();
-                                csteps.courseId = context.model.get("_id"); // courseId
-                                csteps.fetch({
-                                    success: function () {
-                                        csteps.each(function (m) {
-                                            stepsids.push(m.get("_id"))
-                                            stepsres.push("0")
-                                            stepsstatus.push("0")
-                                        })
-                                        memprogress.set("stepsIds", stepsids)
-                                        memprogress.set("memberId", leader)    //Needs some changes here
-                                        memprogress.set("stepsResult", stepsres)
-                                        memprogress.set("stepsStatus", stepsstatus)
-                                        memprogress.set("courseId", csteps.courseId)
-                                        memprogress.save({
-                                            success: function () {
-                                                alert(App.languageDict.attributes.Success_Saved_Msg)
-                                            }
-                                        })
-                                    }
-                                });
-                            }
+                            // (ii) new-leader's membercourseprogress doc should be created and initialised with default values
+                            //COPIED CODE FROM HERE
+                            //  }
+                           // if ( (leader !== previousLeader) && (isNewLeaderAlreadyCourseMember === false) )  //Needs some changes here
+                            _.each(leader,function(leaderId){
+                               
+                                var index = previousLeader.indexOf(leaderId);
+                                if (index == -1) {
+                                    var csteps = new App.Collections.coursesteps();
+                                    csteps.courseId = context.model.get("_id"); // courseId
+                                    csteps.fetch({
+                                        success: function () {
+                                            stepsids=[];
+                                            stepsres=[];
+                                            stepsstatus=[];
+                                            csteps.each(function (m) {
+                                                stepsids.push(m.get("_id"))
+                                                stepsres.push("0")
+                                                stepsstatus.push("0")
+                                            })
+                                            memprogress.set("stepsIds", stepsids)
+                                            memprogress.set("memberId", leaderId)
+                                            memprogress.set("stepsResult", stepsres)
+                                            memprogress.set("stepsStatus", stepsstatus)
+                                            memprogress.set("courseId", csteps.courseId)
+                                            memprogress.save({
+                                                success: function () {
+                                                    alert(App.languageDict.attributes.Success_Saved_Msg)
+                                                }
+                                            })
+                                        }
+                                    });
+                                }
+                            });
+
 
                             //alert(that.model.get("_id"))
                             ///to get the latest rev.id
